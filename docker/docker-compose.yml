@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+  restserver:
+    build:
+      context: ..
+      dockerfile: dockerfile
+    ports:                        
+      - 8080:8080  
+    networks:
+      - bombardier_network
+    restart: always
+    logging:
+        driver: none
+
+
+  bombardier:
+    build:
+      context: .
+      dockerfile: dockerfile
+    networks:
+        - bombardier_network
+    command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        bombardier -c 125 -n 10000 -m GET restserver:8080/hello && \
+        bombardier -c 125 -n 10000 -m POST -b "message by docker compose" restserver:8080/data
+    #&& in sequnce &/ parallel
+    
+networks:
+  bombardier_network:
+    driver: bridge

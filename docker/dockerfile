@@ -1,0 +1,8 @@
+# Use an official Golang runtime as a parent image
+FROM golang:latest
+
+# Install necessary packages and dependencies
+RUN go install github.com/codesenberg/bombardier@latest
+
+#RUN export PATH=$PATH:~/go/bin
+
